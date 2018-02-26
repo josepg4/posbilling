@@ -1,0 +1,45 @@
+Table - inventory
+-----------------
+id          - defaultID
+prodid      - string("prodid", 5)       unique      - ProductID
+prodname    - string("prodname")                    - Product name
+dispname    - string("dispname", 10)
+isremoved   - boolean("isremoved)                   - is this product valid now? delete will make this true
+stock       - integer("stock")                      - stock count
+unitprice   - float("unitprice", 9, 2)              - product price
+category    - string("category")                    - product category
+tax         - decimal("tax", 5, 2)                  - tax percent
+hasoff      - boolean("hasoff")                     - has offer or not
+offtype     - string("offtype")                     - type of offer
+offvalue    - float("offvalue", 9, 2)               - amonut depends on offertype
+updated_by  - string("updated_by")                  - last updated user 
+created_at  -                                       - created timestamp
+updated_at  -                                       - last updated timestamp
+
+
+Table - users
+------------
+id          - defaultID
+username    - string("username")
+password    - string("password")
+isadmin     - boolean("isadmin")
+canedit     - boolean("canedit")
+created_at  - timestamp("created_at").defaultTo(knex.fn.now())
+
+Table - sales 
+-------------
+id          - defaultID
+billno      - string(billno)
+
+billdetails - json("billdetails")  [{ prodid    : 
+                                      dispname  :
+                                      unitprice :
+                                      quanityt  :
+                                      netamount :
+                                      tax       :
+                                      taxamount :
+                                      offamount : 
+                                      }]
+username    - string("username")
+created_at  - timestamp("created_at").defaultTo(knex.fn.now())
+

@@ -1,0 +1,32 @@
+.topbar {
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    height:65px;
+    background:rgb(46, 42, 42);
+    padding-top: 15px;
+}
+
+#main_wrap { 
+    position: fixed;
+    top:65px;
+    left:0;
+    height: calc(100% - 65px);
+    width:100%;
+}
+
+app-sidebar {
+    background:rgb(46, 42, 42);
+    min-width: 150px;
+    max-width: 150px;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+
+h4 {
+    color: White;
+}

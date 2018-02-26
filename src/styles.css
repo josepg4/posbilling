@@ -1,1 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+
+html,body {
+    height: 100%;
+    width: 100%;
+}
+
+app-root { 
+    height: 100%;
+    min-height: 100%; 
+    max-height: 100%;
+    display: flex;
+    width: 100%;
+}
+
+app-dashboard,app-inventory,app-items {
+    background:white;
+    vertical-align: top;
+    position: absolute;
+    left: 150px;
+    top: 0px;
+    right: 0px;
+    width: calc(100% - 150px);
+    height: 100%;
+    overflow: auto;
+}
+
+.input-group-sm.inventory-filter > .ng-select.form-control {
+    border:0px;
+    border-radius: 0;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+}
+
+.input-group-sm.inventory-filter > .input-group-append > .btn {
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+}
+
+.input-group-sm.inventory-filter > .ng-select.form-control .ng-control  {            
+    min-height: 31px;
+    max-height: 31px;
+    border-radius: 0.2rem;
+}
+
+ng-select.form-control > .ng-select-dropdown-outer .ng-select-dropdown .ng-option {
+    padding: 1px 10px;
+}
+
+.input-group > ng-select.form-control {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.form-control.ng-select.ng-multiple .ng-control .ng-value-container {
+    padding-top: 4px;
+}

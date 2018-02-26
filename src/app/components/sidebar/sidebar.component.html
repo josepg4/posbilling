@@ -1,0 +1,48 @@
+<div class="sidebar-btn" [class.sidebar-btn-clicked]="isDashClicked" (click)="sidebarBtnClicked(1)">
+    <fa name="area-chart" ></fa>
+    <span>Dashboard</span>
+</div>
+<div class="sidebar-btn" [class.sidebar-btn-clicked]="isInventoryClicked" (click)="sidebarBtnClicked(2)">
+    <fa name="archive" ></fa>
+    <span>Inventory</span>
+</div>
+<div class="sidebar-btn" [class.sidebar-btn-clicked]="isContactClicked" (click)="sidebarBtnClicked(3)">
+    <fa name="address-card-o" ></fa>
+    <span>Contacts</span>
+</div>
+<div class="sidebar-btn-header">
+    <fa name="shopping-bag" ></fa>
+    <span>Items</span>
+</div>
+<div class="sidebar-btn sidebar-btn-group" [class.sidebar-btn-clicked]="isListItemsClicked" (click)="sidebarBtnClicked(4)">
+    <fa name="list" ></fa>
+    <span>List Items</span>
+</div>
+<div class="sidebar-btn sidebar-btn-group" [class.sidebar-btn-clicked]="isNewItemClicked" (click)="sidebarBtnClicked(5)">
+    <fa name="plus-square-o" ></fa>
+    <span>New Item</span>
+</div>
+<div class="sidebar-btn-header">
+    <fa name="truck" ></fa>
+    <span>Purchases</span>
+</div>
+<div class="sidebar-btn sidebar-btn-group" [class.sidebar-btn-clicked]="isNewPurchaseClicked" (click)="sidebarBtnClicked(6)">
+    <fa name="plus-square-o" ></fa>
+    <span>New</span>
+</div>
+<div class="sidebar-btn sidebar-btn-group" [class.sidebar-btn-clicked]="isPurchaseHistoryClicked" (click)="sidebarBtnClicked(7)">
+    <fa name="history" ></fa>
+    <span>History</span>
+</div>
+<div class="sidebar-btn-header">
+    <fa name="shopping-cart" ></fa>
+    <span>Billing</span>
+</div>
+<div class="sidebar-btn sidebar-btn-group" [class.sidebar-btn-clicked]="isNewBillingClicked" (click)="sidebarBtnClicked(8)">
+    <fa name="cart-plus" ></fa>
+    <span>New</span>
+</div>
+<div class="sidebar-btn sidebar-btn-group" [class.sidebar-btn-clicked]="isBillingHistoryClicked" (click)="sidebarBtnClicked(9)">
+    <fa name="history" ></fa>
+    <span>History</span>
+</div>

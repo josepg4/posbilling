@@ -1,0 +1,75 @@
+<div class="container-fluid mt-3">
+  <div class="row">
+    <div class="col-12">
+      <div class="col-12 py-3 mb-3 border rounded">
+        <div class="row">
+          <div class="col-4">
+            <label for="filterproductid">Search</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4">
+            <div class="input-group inventory-filter input-group-sm mb-3">
+              <ng-select class="form-control" placeholder="Item ID" [items]="inventory" bindLabel="prodid" [(ngModel)]="selectedItem"
+                (change)="returnOne()">
+              </ng-select>
+              <div class="input-group-append">
+                <button (click)="returnTwo()" class="btn btn-outline-secondary" type="button">Search</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="input-group inventory-filter input-group-sm mb-3">
+              <ng-select class="form-control" placeholder="Item Name" [items]="inventory" bindLabel="prodname" [(ngModel)]="selectedItem"
+                (change)="returnOne()">
+              </ng-select>
+              <div class="input-group-append">
+                <button (click)="returnTwo()" class="btn btn-outline-secondary" type="button">Search</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="input-group inventory-filter input-group-sm mb-3">
+              <ng-select class="form-control" placeholder="Category" [items]="inventory" bindLabel="category" [(ngModel)]="selectedCategory"
+                multiple="true" >
+              </ng-select>
+              <div class="input-group-append">
+                <button (click)="returnThree()" class="btn btn-outline-secondary" type="button">Search</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+              <label for="filterproductid">Filter Items</label>
+            </div>
+          </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label (click)="showAll()" class="btn btn-outline-primary btn-sm active">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked> All Items
+              </label>
+              <label (click)="filterLowStock()" class="btn btn-outline-warning btn-sm">
+                <input type="radio" name="options" id="option2" autocomplete="off"> Low Stock Items
+              </label>
+              <label (click)="filterEmptyStock()" class="btn btn-outline-danger btn-sm">
+                <input type="radio" name="options" id="option3" autocomplete="off"> Empty Stock Items
+              </label>
+              <label (click)="filterWithOffer()" class="btn btn-outline-info btn-sm">
+                <input type="radio" name="options" id="option3" autocomplete="off"> With Offer
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="col-12 border rounded pt-3">
+        <app-inventorypageination [data]="inventorySorted"></app-inventorypageination>
+      </div>
+    </div>  
+  </div>
+</div>
