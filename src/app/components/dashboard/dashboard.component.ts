@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { InventorydataService } from "../../services/inventorydata.service"
+import { InventorydataService } from '../../services/inventorydata.service';
+
+import { Item } from '../../models/Item';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,13 +10,15 @@ import { InventorydataService } from "../../services/inventorydata.service"
 })
 export class DashboardComponent implements OnInit {
 
-  inventory : any[];
+  inventory : Item[] = [];
 
-  constructor(private _inventorydataService : InventorydataService) { }
+  selectedItem : Item;
+
+  constructor(private _inventorydataService: InventorydataService) { }
 
   ngOnInit() {
-    this._inventorydataService.getInventory().subscribe(inventory => {
-      this.inventory = inventory;
+    this._inventorydataService.getInventory().subscribe(items => {
+      this.inventory = items;
     });
   }
 

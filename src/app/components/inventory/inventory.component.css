@@ -1,0 +1,18 @@
+.title-bar {
+    background-color: #394044;
+    color: #7ED3E9;
+}
+
+h6 {
+    color : rgba(77, 85, 87, 0.75);
+}
+
+.inline-header h4{
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+.tab-btn.btn-outline-light {
+    color: #7ED3E9;
+    border-color: #7ED3E9;
+}

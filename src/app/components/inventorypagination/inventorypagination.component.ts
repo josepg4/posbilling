@@ -4,12 +4,12 @@ import { PaginationInstance } from 'ngx-pagination';
 import { Item } from '../../models/Item';
 
 @Component({
-  selector: 'app-inventorypageination',
-  templateUrl: './inventorypageination.component.html',
-  styleUrls: ['./inventorypageination.component.css'],
-  changeDetection: ChangeDetectionStrategy.Default
+  selector: 'app-inventorypagination',
+  templateUrl: './inventorypagination.component.html',
+  styleUrls: ['./inventorypagination.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InventorypageinationComponent implements OnInit {
+export class InventorypaginationComponent implements OnInit {
 
   @Input('data') inventory: Item[];
 

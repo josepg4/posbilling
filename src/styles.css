@@ -4,6 +4,7 @@
 html,body {
     height: 100%;
     width: 100%;
+    background-color: #D4D8D9 !important; 
 }
 
 app-root { 
@@ -14,8 +15,7 @@ app-root {
     width: 100%;
 }
 
-app-dashboard,app-inventory,app-items {
-    background:white;
+app-dashboard,app-inventory,app-items,app-billing,app-billhistory {
     vertical-align: top;
     position: absolute;
     left: 150px;
@@ -23,7 +23,31 @@ app-dashboard,app-inventory,app-items {
     right: 0px;
     width: calc(100% - 150px);
     height: 100%;
-    overflow: auto;
+    overflow-y: scroll;
+    font-size: 0.9rem;
+    line-height: 1.25;
+}
+
+app-billhistorypagination {   
+    font-size: 0.9rem;
+    line-height: 1.25;
+}
+
+.inventory-search > .ng-select {
+    border:0px;
+    border-radius: 0;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+}
+
+.inventory-search > .ng-select .ng-control  {            
+    min-height: 31px;
+    border-radius: 0.2rem;
+    border: 1px solid rgba(77, 85, 87, 0.5);
+}
+
+.inventory-search > ng-select > .ng-select-dropdown-outer .ng-select-dropdown .ng-option {
+    padding: 3px 10px;
 }
 
 .input-group-sm.inventory-filter > .ng-select.form-control {
@@ -40,7 +64,6 @@ app-dashboard,app-inventory,app-items {
 
 .input-group-sm.inventory-filter > .ng-select.form-control .ng-control  {            
     min-height: 31px;
-    max-height: 31px;
     border-radius: 0.2rem;
 }
 
@@ -55,4 +78,12 @@ ng-select.form-control > .ng-select-dropdown-outer .ng-select-dropdown .ng-optio
 
 .form-control.ng-select.ng-multiple .ng-control .ng-value-container {
     padding-top: 4px;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+ng-datepicker, .my-date-picker > .ngx-datepicker-container .ngx-datepicker-input {
+    width : 100% !important;
 }

@@ -1,8 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 
-require('electron-reload')(path.join(__dirname, "dist"));
-
 let win;
 let background;
 

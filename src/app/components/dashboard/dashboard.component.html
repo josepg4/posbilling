@@ -1,5 +1,17 @@
-<ul>
-  <li *ngFor="let item of inventory">
-    {{item.prodid}}
-  </li>
-</ul>
+<p>
+  dashboard works!
+</p>
+<ng-select class="custom"
+            [items]="inventory"
+            bindLabel="prodid"
+            placeholder="Select item"
+            [(ngModel)]="selectedItem">
+</ng-select>
+
+<ng-select [items]="inventory"
+            bindLabel="prodname"
+            placeholder="Select item"
+            [(ngModel)]="selectedItem">
+</ng-select>
+
+{{selectedItem}}

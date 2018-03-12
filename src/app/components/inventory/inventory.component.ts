@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { InventorydataService } from '../../services/inventorydata.service';
 
 import { Item } from '../../models/Item';
-import { Input } from '@angular/core/src/metadata/directives';
 
 @Component({
   selector: 'app-inventory',
@@ -11,13 +10,13 @@ import { Input } from '@angular/core/src/metadata/directives';
 })
 export class InventoryComponent implements OnInit {
 
-  p: number = 1;
   inventory : Item[] = [];
   inventorySorted : Item[] = [];
   toggle : boolean = true;
   selectedItem : Item;
   selectedCategory : Item[];
   filterClicked : number = 0;
+  categories : any[];
 
   constructor(private _inventorydataService: InventorydataService) { }
 
@@ -25,45 +24,46 @@ export class InventoryComponent implements OnInit {
     this._inventorydataService.getInventory().subscribe(items => {
       this.inventory = items;
       this.inventorySorted = items;
-      console.log("this happens")
-    })
+    });
+    this._inventorydataService.getCategory().subscribe(items => {
+      this.categories = items;
+    });
   }
+    
+  fireevent (){
+        this.inventory.unshift({
+          id        : 1000,
+          prodid    : "string",
+          prodname  : "string fdasd afasdf dsfasd",
+          proddisc  : "string",
+          isremoved : true,
+          stock     : 0,
+          unitprice : 0,
+          category  : 0,
+          tax       : 0,
+          hasoff    : 0,
+          offtype   : "string",
+          offvalue  : 0,
+          updated_by: "string",
+          created_at: new Date(),
+          updated_at: new Date()
+      });
+    }
 
   showAll = () => {
     this.filterClicked = 0;
     this.inventorySorted = this.inventory;
   }
   
-  returnOne = () => {
+  onItemSelected = () => {
     if(this.selectedItem){
-    }else{
-      switch(this.filterClicked){
-        case 0 :
-          this.showAll();
-          break;
-        case 1 :
-          this.filterLowStock();
-          break;
-        case 2 :
-          this.filterEmptyStock();
-          break;
-        case 3 :
-          this.filterWithOffer();
-          break;
-      }
-    }
-  };
-
-  returnTwo = () => {
-    if(this.selectedItem){
-      console.log("clicked")
+      this.filterClicked = undefined;
       this.inventorySorted = [];
       this.inventorySorted.push(this.selectedItem);
+    }else{
+      this.filterClicked = 0;
+      this.showAll();
     }
-  };
-
-  returnThree = () => {
-    console.log(this.selectedCategory);
   };
 
   filterLowStock = () => {

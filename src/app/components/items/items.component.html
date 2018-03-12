@@ -1,12 +1,16 @@
-<div class="container-fluid my-3">
-  <div class="row pb-3">
+<div class="container-fluid">
+    <div class="row py-2 title-bar">
+        <div class="col">
+          <h4><span *ngIf="!isEdit">Add</span><span *ngIf="isEdit">Edit</span> Item</h4>
+        </div>
+      </div>
+  <div class="row pb-3 mt-3">
     <div class="col-4">
-      <div class="card card-body">
-        <h2><span *ngIf="!isEdit">Add</span><span *ngIf="isEdit">Edit</span> Item</h2>
+      <div class="card card-body p-3">
         <form #itemForm="ngForm" (ngSubmit)="onSubmit(itemForm)">
           <div class="form-group items-form">
             <label class="col-form-label-sm">Item ID</label>
-            <input type="text" [ngClass]="{'is-invalid':itemProdID.errors && itemProdID.touched}" #itemProdID="ngModel" class="form-control form-control-sm" [(ngModel)]="currentItem.prodid" name="prodid" [disabled]="isEdit" required>
+            <input type="text" [ngClass]="{'is-invalid':itemProdID.errors && itemProdID.touched}" #itemProdID="ngModel" class="form-control form-control-sm" [(ngModel)]="currentItem.prodid" name="prodid" disabled required>
           </div>
           <div class="form-group items-form">
             <label class="col-form-label-sm">Item name</label>
@@ -19,7 +23,7 @@
           <div class="form-group items-form">
             <label class="col-form-label-sm">Category</label>
             <select class="form-control form-control-sm" [(ngModel)]="currentItem.category" name="category" required>
-              <option *ngFor="let category of categories">{{category}}</option>
+              <option *ngFor="let category of categories" [ngValue]="category.id">{{category.name}}</option>
             </select>
           </div>
           <div class="form-row">
@@ -39,23 +43,20 @@
           <div class="form-group items-form">
             <label class="col-form-label-sm">Tax</label>
             <select class="form-control form-control-sm" [(ngModel)]="currentItem.tax" name="tax" required>
-              <option *ngFor="let tax of taxes" [ngValue]="tax.id">{{tax.name}}</option>
+              <option *ngFor="let tax of taxes" [ngValue]="tax.taxid">{{tax.taxname}}</option>
             </select>
           </div>
           <div class="form-group items-form">
             <div class="input-group input-group-sm mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="inputGroup-sizing-sm">Offer</span>
-                <div class="input-group-text">
-                  <input type="checkbox" name="hasoff" [checked]="currentItem.hasoff" (change)="currentItem.hasoff = !currentItem.hasoff" [ngModel]="currentItem.hasoff">
-                </div>
-                <select *ngIf="currentItem.hasoff" class="form-control form-control-sm" [ngModel]="selectedoffer" (ngModelChange)="onChangeOffer($event)" [ngModelOptions]="{standalone: true}" placeholder="Select Offer">
-                  <option [ngValue]="offer" *ngFor="let offer of offers">{{offer.name}}</option>
+                <select class="form-control form-control-sm" [ngModel]="currentItem.hasoff" (ngModelChange)="onChangeOffer($event)" placeholder="Select Offer" name="hasoff">
+                  <option *ngFor="let offer of offers" [ngValue]="offer.offerid">{{offer.name}}</option>
                 </select>
               </div>
             </div>
           </div>
-          <div *ngIf="currentItem.hasoff" class="form-row">
+          <div *ngIf="currentItem.hasoff != 0" class="form-row">
             <div class="col">
               <div class="form-group items-form">
                 <label class="col-form-label-sm">Offer Type</label>
@@ -83,7 +84,7 @@
         </form>
       </div>
     </div>
-    <div class="col-8 border rounded pt-3">
+    <div class="col-8 py-0 pl-0">
       <app-itemspagination [data]="inventory" (updateItem)="onUpdateItem($event)" (removeItem)="onRemoveItem($event)"></app-itemspagination>
     </div>
   </div>

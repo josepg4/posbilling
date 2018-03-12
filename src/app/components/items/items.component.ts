@@ -19,42 +19,9 @@ import {
 export class ItemsComponent implements OnInit {
 
   inventory: Item[] = [];
-  categories: string[] = ["A", "B", "C"];
-  taxes: any[] = [{
-    id: 0,
-    name: "GST @ 0",
-    value: 0
-  }, {
-    id: 1,
-    name: "GST @ 5",
-    value: 5
-  }, {
-    id: 2,
-    name: "GST @ 12",
-    value: 12
-  }, {
-    id: 10,
-    name: "GST @ 18",
-    value: 18
-  }];
-  offers: any[] = [{
-    name: "Percent",
-    value: 0,
-    type: "percent"
-  }, {
-    name: "Rupee",
-    value: 0,
-    type: "rupee"
-  }, {
-    name: "Summer 5",
-    value: 5,
-    type: "percent"
-  }]
-  selectedoffer: any = {
-    name: "Selct Offer",
-    value: 0,
-    type: ""
-  };
+  categories: any[] = [];
+  taxes: any[] = [];
+  offers: any[] = [];
   isActive: boolean = false;
   isEdit: boolean = false;
 
@@ -70,7 +37,7 @@ export class ItemsComponent implements OnInit {
     unitprice: null,
     category: null,
     tax: null,
-    hasoff: false,
+    hasoff: 0,
     offtype: 'percent',
     offvalue: 0,
     updated_by: null
@@ -82,12 +49,34 @@ export class ItemsComponent implements OnInit {
     this._inventorydataService.getInventory().subscribe(items => {
       this.inventory = items;
     });
+    this._inventorydataService.getstoredId().subscribe(itemid => {
+      if(!this.isEdit){
+        this.currentItem.prodid = 'P' + (itemid.prodid + 1).toString();
+      }
+    });
+    this._inventorydataService.getCategory().subscribe(category => {
+      this.categories = category;
+    });
+    this._inventorydataService.getOffers().subscribe(offers => {
+      this.offers = offers;
+    })
+    this._inventorydataService.getTaxes().subscribe(taxes => {
+      this.taxes = taxes;
+    })
   }
 
 
-  onChangeOffer(offer: any) {
-    this.currentItem.offtype = offer.type;
-    this.currentItem.offvalue = offer.value;
+  onChangeOffer(offerId: number) {
+
+    this.offers.some((cur, index) => {
+      if(cur.offerid == offerId){
+        this.currentItem.hasoff = offerId;
+        this.currentItem.offtype = this.offers[index].type;
+        this.currentItem.offvalue = this.offers[index].value;
+        return true;
+      }
+      return false;
+    })
   }
 
   onSubmit({
@@ -134,34 +123,42 @@ export class ItemsComponent implements OnInit {
   }
 
   onAddItem(item: Item) {
+    item.prodid = this.currentItem.prodid;
     this._inventorydataService.savePost(item).subscribe(item => {
-      this.inventory.unshift(item);
-      this.setEmptyItem();
-      this.isActive = false;
+      if (item.status === 'ok') {
+        this.inventory.unshift(item);
+        this.setEmptyItem();
+        this.isActive = false;
+      } else {
+        this.isActive = false;
+        //do error popup here
+      }
     }, error => {
       console.log(error);
     })
   }
 
   setEmptyItem() {
-    
-    this.isEdit = false;
     this.form.reset();
-    this.currentItem = {
-      id: null,
-      prodid: null,
-      prodname: null,
-      proddisc: null,
-      isremoved: false,
-      stock: null,
-      unitprice: null,
-      category: null,
-      tax: null,
-      hasoff: false,
-      offtype: 'percent',
-      offvalue: 0,
-      updated_by: null
-    };
+    this._inventorydataService.getstoredId().subscribe(itemid => {
+      this.isEdit = false;
+      this.currentItem = {
+        id: null,
+        prodid: 'P' + (itemid.prodid + 1).toString(),
+        prodname: null,
+        proddisc: null,
+        isremoved: false,
+        stock: null,
+        unitprice: null,
+        category: 0,
+        tax: 0,
+        hasoff: 0,
+        offtype: 'percent',
+        offvalue: 0,
+        updated_by: null
+      };
+    })
+
   }
 
 }

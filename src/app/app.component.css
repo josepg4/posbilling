@@ -4,7 +4,7 @@
     left:0;
     right:0;
     height:65px;
-    background:rgb(46, 42, 42);
+    background: #4D5557;
     padding-top: 15px;
 }
 
@@ -17,7 +17,7 @@
 }
 
 app-sidebar {
-    background:rgb(46, 42, 42);
+    background:#394044;
     min-width: 150px;
     max-width: 150px;
     height: 100%;

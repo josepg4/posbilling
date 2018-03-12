@@ -1,0 +1,147 @@
+<div class="container-fluid">
+    <div class="row py-2 title-bar inline-header">
+        <div class="col">
+          <h4>Billing</h4>
+        </div>
+      </div>
+  <div class="row">
+      <div class="card card-body p-2 mt-0 mb-3">
+        <div class="form-row">
+          <div class="input-group input-group-sm inventory-filter col-3">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Item</div>
+            </div>
+            <ng-select class="form-control" placeholder="Item" [items]="inventory" bindLabel="prodname" [(ngModel)]="selectedItem" (change)="itemSelected(selectedItem)" [disabled]="isBillSaved">
+            </ng-select>
+          </div>
+          <div class="input-group input-group-sm col-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">QTY</div>
+            </div>
+            <input type="number" class="form-control" placeholder="MRP" [(ngModel)]="billItem.quantity" [disabled]="!selectedItem" (blur)="onQuantityChange()">
+          </div>
+          <div class="input-group input-group-sm col-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">MRP</div>
+            </div>
+            <input type="text" class="form-control" placeholder="MRP" [(ngModel)]="billItem.unitprice" disabled>
+          </div>
+          <div class="input-group input-group-sm col-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">TAX</div>
+            </div>
+            <input type="text" class="form-control" placeholder="TAX" [(ngModel)]="billItem.tax" disabled>
+          </div>
+          <div class="input-group input-group-sm  col-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Discount</div>
+            </div>
+            <input type="text" class="form-control" placeholder="Discount" [(ngModel)]="billItem.offvalue" [disabled]="!selectedItem">
+          </div>
+          <div class="input-group input-group-sm col-1">
+                  <button type="submit" (click)="onNewBillItem()" class="btn btn-sm btn-outline-primary btn-block" [disabled]="!selectedItem">Add Item</button>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div *ngIf="showError" class="row">
+      <div class="col">
+          <div class="alert alert-danger" role="alert">
+              {{message}}
+            </div>
+      </div>
+    </div>
+  <div class="row bill-items mt-2">
+    <div class="col">
+      <ul class="list-group">
+        <li class="list-group-item bg-light py-1 text-uppercase">
+          <div class="row">
+            <div class="col-3  text-truncate">
+              Item Name (MRP|Discount)
+            </div>
+            <div class="col-2  text-truncate">
+              Unit Price
+            </div>
+            <div class="col-1  text-truncate">
+              Quantity
+            </div>
+            <div class="col-2  text-truncate">
+                Net Amount
+              </div>
+            <div class="col-1  text-truncate">
+              Tax
+            </div>
+            <div class="col-1  text-truncate">
+              Tax Value
+            </div>
+            <div class="col-2  text-truncate">
+              Total
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item text-center" *ngIf="bill.items.length === 0">
+          No items Added
+        </li>
+        <li class="list-group-item py-1" *ngFor="let billitem of bill.items" >
+            <div class="row">
+              <div class="col-3  text-truncate">
+                 {{billitem.prodname }}  ( {{ billitem.unitprice*(billitem.tax+100)/100 + (billitem.offvalue) | number:'1.0-2'}} | {{billitem.offvalue | number:'1.0-2'}} )
+              </div>
+              <div class="col-2 text-truncate">
+                {{billitem.unitprice | number:'1.0-2'}}
+              </div>
+              <div class="col-1 text-truncate">
+                {{billitem.quantity}}
+              </div>
+              <div class="col-2 text-truncate">
+                  {{billitem.unitprice*billitem.quantity | number:'1.0-2'}}
+                </div>
+              <div class="col-1  text-truncate">
+                {{billitem.tax | number:'1.1-2'}} %
+              </div>
+              <div class="col-1  text-truncate">
+                  {{billitem.unitprice*billitem.quantity*billitem.tax/100 | number:'1.0-2'}}
+              </div>
+              <div class="col-2">
+                <div class="row">
+                  <div class="col-10 text-truncate">
+                      {{billitem.unitprice*billitem.quantity + (billitem.unitprice*billitem.quantity*billitem.tax/100) | number:'1.2-2'}}
+                  </div>
+                  <div class="col-2 btn btn-outline-danger removeitem" (click)="onBillItemRemove(billitem)" >
+                      <fa name="close" ></fa>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+      </ul>
+    </div>
+  </div>
+  <div class="mx-0 bill-bottom bg-white card card-body py-2">
+    <div class="row">
+      <div class="col-4">
+        <h4># {{bill.billid}} 
+            <small *ngIf="bill.items.length === 0" class="text-muted">No Items Added</small>
+          <small *ngIf="bill.items.length === 1" class="text-muted">Total {{bill.items.length}} Item</small>
+          <small *ngIf="bill.items.length > 1" class="text-muted">Total {{bill.items.length}} Items</small>
+        </h4>
+      </div>
+      <div class="col-2">
+          <span class="d-block h-25 text-left pt-1 my-2"><h6>Total Discount Value</h6></span>
+          <span class="d-block h-25 text-left pt-1 my-2"><h6>Total Tax Amount</h6></span>
+        </div>
+        <div class="col-2">
+            <span class="d-block h-25 text-left pt-1 my-2"><h6>: {{bill.offvalue | currency:'INR':'symbol-narrow':'1.2-2'}} </h6></span>
+            <span class="d-block h-25 text-left pt-1 my-2"><h6>: {{bill.tax | currency:'INR':'symbol-narrow':'1.2-2'}}</h6></span>
+          </div>
+      <div class="col-2">
+        <span class="d-block h-25 align-top text-center pt-1"><h6>TOTAL</h6></span>
+        <span class="d-block h-75 align-bottom text-center pt-2"><h2>{{bill.total | currency:'INR':'symbol-narrow':'1.2-2'}}</h2></span>
+      </div>
+      <div class="col-2">
+          <button type="button" (click)="onNewBill()" class="btn btn-sm btn-primary btn-block" [disabled]="bill.items.length < 1 || onDC || isBillSaved" >Save</button>
+          <button type="button"  (click)="onClearBill()" class="btn btn-sm btn-secondary btn-block" [disabled]="!isBillSaved || onDC">New</button>
+      </div>          
+  </div>
+</div>
+</div>

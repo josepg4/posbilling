@@ -42,6 +42,7 @@ export class SidebarComponent {
                 break;
             }
             case 3:{
+                
                 break;
             }
             case 4:{
@@ -58,9 +59,11 @@ export class SidebarComponent {
                 break;
             }
             case 8:{
+                this.router.navigateByUrl('/newbill');
                 break;
             }
             case 9:{
+                this.router.navigateByUrl('/billhistory');
                 break;
             }
         }

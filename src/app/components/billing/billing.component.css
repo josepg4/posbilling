@@ -1,0 +1,27 @@
+.bill-bottom{
+    position: fixed;
+    bottom: 0px;
+    left: 150px;
+    height : 100px;
+    width :calc(100% - 150px)
+}
+.bill-items {
+    margin-bottom: 100px;
+}
+
+.btn.removeitem {
+    border: none;
+    padding: 0px;
+    line-height: 1.25;
+    border-radius: 0px;
+}
+
+.title-bar {
+    background-color: #394044;
+    color: #7ED3E9;
+}
+
+.inline-header h4{
+  display: inline-block;
+  vertical-align: baseline;
+}

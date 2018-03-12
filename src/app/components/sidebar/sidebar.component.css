@@ -8,12 +8,11 @@
     font-size: 15px;
     font-weight: 300;
 
-    border-bottom: 2px solid rgb(46, 42, 42);
+    border-bottom: 2px solid #394044;
 }
 
 .sidebar-btn:hover{
     color: rgb(126, 211, 233);
-    border-bottom: 2px solid rgb(126, 211, 233);
 }
 
 .sidebar-btn-header {
@@ -25,7 +24,7 @@
     font-size: 15px;
     font-weight: 500;
 
-    border-bottom: 2px solid rgb(46, 42, 42);
+    border-bottom: 2px solid #394044;
 }
 
 .sidebar-btn-group{

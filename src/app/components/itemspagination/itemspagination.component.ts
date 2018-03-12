@@ -17,7 +17,7 @@ export class ItemspaginationComponent implements OnInit {
 
   public config: PaginationInstance = {
     id: 'itempagination',
-    itemsPerPage: 25,
+    itemsPerPage: 7,
     currentPage: 1
   };
 

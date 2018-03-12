@@ -21,31 +21,11 @@
   .w-40 {
     width: 40%;
   }
-  
-  .table {
-      table-layout:fixed;
-  }
-  
-  .table td{
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 13px;
-      line-height: 1.4;
-  }
-  
-  .table th{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 13px;
-    line-height: 1.75;
-  }
-  
-  .table tr{ 
-      font-weight: 400;
-  }
 
   .card-body.itemlist, .card-header.itemlist {
     padding: 0.5rem;
+  }
+
+  .btn.btn-sm {
+    border : 0;
   }
