@@ -1,0 +1,44 @@
+.user-header{
+    display: flex;
+    padding-top : 0.25em;
+    padding-bottom: 0.25em;
+    align-items: center;
+}
+
+.pag-err {
+    display : flex;
+}
+
+.err {
+    flex : 1;
+    margin-left : 1em; 
+    padding-left: 0.75em;
+    display: flex;
+    align-items: center;
+}
+
+.add-btn{
+    margin-left: auto;
+}
+
+.heading{
+    font-size: 1.2em;
+}
+
+
+.btn.removeitem {
+    font-size: 0.9em;
+    margin-left: 0.5em;
+    margin-right: 0em;
+    padding: .2em;
+    line-height: 0.5em;
+}
+
+.col-canedit{
+    display: flex;
+    padding-right: 0.5em;
+}
+
+.canedit-val{
+    flex : 1;
+}

@@ -34,7 +34,7 @@
                 <h6>Search Category</h6>
               </div> -->
               <ng-select class="ng-selct-form-control" placeholder="Search Category" [items]="categories" bindLabel="name" [(ngModel)]="selectedCategory"
-                multiple="true">
+                multiple="true" disabled>
               </ng-select>
             </div>
             <div class="col-4  inventory-search">
@@ -42,7 +42,7 @@
                     <h6>Sort Items</h6>
                   </div> -->
                 <ng-select class="ng-selct-form-control" placeholder="Sort Items" [items]="inventory" bindLabel="prodname" [(ngModel)]="selectedItem"
-                (change)="onItemSelected()">
+                (change)="onItemSelected()" disabled>
               </ng-select>
             </div>
           </div>

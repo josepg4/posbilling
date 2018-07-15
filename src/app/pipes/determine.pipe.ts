@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { InventorydataService } from '../services/inventorydata.service';
+import { StaticdataholdingService } from '../services/staticdataholding.service';
 import { Tax } from '../models/Tax'
 
 @Pipe({
@@ -11,13 +11,9 @@ export class DeterminePipe implements PipeTransform {
   taxes : Tax[];
   categories : any[];
 
-  constructor(private _inventorydataService: InventorydataService) {
-    this._inventorydataService.getTaxes().subscribe(result => {
-      this.taxes = result;
-    })
-    this._inventorydataService.getCategory().subscribe(result => {
-      this.categories = result;
-    })
+  constructor(private _staticdataService: StaticdataholdingService) {
+    this.taxes = this._staticdataService.getTaxes();
+    this.categories = this._staticdataService.getCategory();
   }
 
   transform(id: number, type: string = 'tax'): string {

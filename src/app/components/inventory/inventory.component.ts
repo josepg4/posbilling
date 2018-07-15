@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InventorydataService } from '../../services/inventorydata.service';
+import { StaticdataholdingService } from '../../services/staticdataholding.service';
 
 import { Item } from '../../models/Item';
 
@@ -18,16 +19,14 @@ export class InventoryComponent implements OnInit {
   filterClicked : number = 0;
   categories : any[];
 
-  constructor(private _inventorydataService: InventorydataService) { }
+  constructor(private _inventorydataService: InventorydataService, private _staticdataService: StaticdataholdingService) { }
 
   ngOnInit() {
     this._inventorydataService.getInventory().subscribe(items => {
       this.inventory = items;
       this.inventorySorted = items;
     });
-    this._inventorydataService.getCategory().subscribe(items => {
-      this.categories = items;
-    });
+    this.categories = this._staticdataService.getCategory()
   }
     
   fireevent (){

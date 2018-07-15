@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { InventorydataService } from '../services/inventorydata.service';
+import { StaticdataholdingService } from '../services/staticdataholding.service';
 
 @Pipe({
   name: 'offer'
@@ -8,11 +8,10 @@ export class OfferPipe implements PipeTransform {
 
   offers : any[];
 
-  constructor(private _inventorydataService: InventorydataService) {
-    this._inventorydataService.getOffers().subscribe(result => {
-      this.offers = result;
-    })
+  constructor(private _staticdataService: StaticdataholdingService) {
+    this.offers = this._staticdataService.getOffers();
   }
+    
 
   transform(offerid: number, offertype: string, offervalue: number): string {
     if(!offerid){

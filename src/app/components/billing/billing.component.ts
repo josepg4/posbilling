@@ -5,6 +5,7 @@ import {
 import {
   InventorydataService
 } from '../../services/inventorydata.service';
+import { StaticdataholdingService } from '../../services/staticdataholding.service';
 
 import {
   Item
@@ -33,9 +34,6 @@ export class BillingComponent implements OnInit {
   isBillSaved : boolean = false;
   onDC : boolean = false;
 
-  //dateFrom : Date;
-  //dateTo : Date;
-
   bill: Bill = {
     billid: null,
     tax: 0,
@@ -44,9 +42,7 @@ export class BillingComponent implements OnInit {
     items: []
   }
 
-  constructor(private _inventorydataService: InventorydataService) {
-    //this.dateFrom = new Date();
-    //this.dateTo = new Date();
+  constructor(private _inventorydataService: InventorydataService, private _staticdataService: StaticdataholdingService) {
   }
 
   ngOnInit() {
@@ -54,9 +50,7 @@ export class BillingComponent implements OnInit {
     this._inventorydataService.getInventory().subscribe(items => {
       this.inventory = items;
     })
-    this._inventorydataService.getTaxes().subscribe(taxes => {
-      this.taxes = taxes;
-    })
+    this.taxes = this._staticdataService.getTaxes()
     this._inventorydataService.getstoredId().subscribe(itemid => {
         this.bill.billid = 'B' + (itemid.billid + 1).toString();
     });
@@ -202,16 +196,6 @@ export class BillingComponent implements OnInit {
       }
     })
   }
-
-  onQuantityChange(): void {
-    //this.billItem.offvalue = this.billItem.quantity*this.getOffValue(this.selectedItem);
-  }
-
- 
-
-  //this._inventorydataService.getBill(this.dateToQueryObject(this.dateFrom, this.dateTo)).subscribe(out => {
-  //   console.log(out);
-  //})
 
   dateToQueryObject(dateFrom: Date, dateTo: Date): any {
     dateFrom.setHours(0, 0, 0, 0);

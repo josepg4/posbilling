@@ -1,25 +1,14 @@
-<div class="container-fluid my-3">
-  <div class="row mb-2 ontop-fifty">
-    <div class="col">
-      <div class="card card-body ontop-fifty">
-        <h6>Billing HIstory</h6>
-        <div class="row mx-0 mt-2 mb-0">
-          <div class="d-inline mr-1 py-1">
-            <span>Show Bills from Date</span>
-          </div>
-          <div class="w-25">
-            <ng-datepicker class="my-date-picker" [(ngModel)]="dateFrom"></ng-datepicker>
-          </div>
-          <div class="d-inline mx-2 py-1">
-            <span>to</span>
-          </div>
-          <div class="w-25">
-            <ng-datepicker class="my-date-picker" [(ngModel)]="dateTo"></ng-datepicker>
-          </div>
-          <button type="button" (click)="getBills()" class="btn btn-sm btn-outline-primary btn-inline-block mx-3">Show</button>
+<div class="container-fluid">
+    <div class="row py-2 title-bar mb-3">
+        <div class="col">
+          <h4 class="d-inline mr-3">Bill History</h4>
+          <span class="d-inline mr-1"><fa name="calendar-o"></fa></span>
+          <ng-datepicker class="my-date-picker ontop-fifty" [(ngModel)]="dateFrom"></ng-datepicker>
+          <span class="d-inline mr-2"><fa name="arrow-right"></fa></span>
+          <span class="d-inline mr-1"><fa name="calendar-o"></fa></span>
+          <ng-datepicker class="my-date-picker ontop-fifty" [(ngModel)]="dateTo"></ng-datepicker>
+          <button type="button" (click)="getBills()" class="btn btn-sm btn-info btn-inline-block mb-1 mr-3">Show</button>
         </div>
       </div>
-    </div>
-  </div>
-  <app-billhistorypagination [data]="bills" (showBillItem)="onShowBillItem($event)" (hideBillItem)="onHideBillItem($event)"></app-billhistorypagination>
+      <app-billhistorypagination [data]="bills" (showBillItem)="onShowBillItem($event)" (hideBillItem)="onHideBillItem($event)"></app-billhistorypagination>
 </div>

@@ -18,6 +18,7 @@ export class SidebarComponent {
     isPurchaseHistoryClicked: boolean;
     isNewBillingClicked: boolean;
     isBillingHistoryClicked: boolean;
+    isSettingsClicked : boolean;
 
     constructor (private router : Router) {
         this.isDashClicked = true;
@@ -29,6 +30,7 @@ export class SidebarComponent {
         this.isPurchaseHistoryClicked = false;
         this.isNewBillingClicked = false;
         this.isBillingHistoryClicked = false;
+        this.isSettingsClicked = false;
     }
 
     sidebarBtnClicked(input : number){
@@ -53,9 +55,11 @@ export class SidebarComponent {
                 break;
             }
             case 6:{
+                this.router.navigateByUrl('/newpurchase');
                 break;
             }
             case 7:{
+                this.router.navigateByUrl('/purchasehistory');
                 break;
             }
             case 8:{
@@ -64,6 +68,10 @@ export class SidebarComponent {
             }
             case 9:{
                 this.router.navigateByUrl('/billhistory');
+                break;
+            }
+            case 10:{
+                this.router.navigateByUrl('/settings');
                 break;
             }
         }
@@ -78,6 +86,7 @@ export class SidebarComponent {
         this.isPurchaseHistoryClicked = (input==7);
         this.isNewBillingClicked = (input==8);
         this.isBillingHistoryClicked = (input==9);
+        this.isSettingsClicked = (input==10);
     }
 
 }

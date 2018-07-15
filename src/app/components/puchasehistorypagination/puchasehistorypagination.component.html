@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="col-12">
+    <pagination-template #p="paginationApi" [id]="config.id" (pageChange)="config.currentPage = $event">
+      <nav aria-label="...">
+        <ul class="pagination pagination-sm justify-content-end">
+          <li [class.disabled]="p.isFirstPage()" class="page-item">
+            <span class="page-link" *ngIf="p.isFirstPage()">Previous</span>
+            <span class="page-link" *ngIf="!p.isFirstPage()" (click)="p.previous()">Previous</span>
+          </li>
+          <li class="page-item" *ngFor="let page of p.pages" [class.active]="p.getCurrent() === page.value">
+            <span class="page-link" (click)="p.setCurrent(page.value)">
+              {{ page.label }}
+            </span>
+          </li>
+          <li [class.disabled]="p.isLastPage()" class="page-item">
+            <span class="page-link" *ngIf="p.isLastPage()">Next</span>
+            <span class="page-link" *ngIf="!p.isLastPage()" (click)="p.next()">Next</span>
+          </li>
+        </ul>
+      </nav>
+    </pagination-template>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <ul class="list-group">
+      <li class="list-group-item bg-light py-3 mb-3" *ngFor="let purchase of purchases | paginate:config">
+        <div class="form-row ">
+          <div class="col-1">
+            <h5 class="text-info">#{{purchase.purchaseid}}</h5>
+          </div>
+          <div class="col-5">
+            <ul class="list-group">
+              <li class="list-group-item py-1 ">Total Amount : {{purchase.total | currency:'INR':'symbol-narrow':'1.2-2'}}</li>
+              <li class="list-group-item py-1">Discount : {{purchase.discount | currency:'INR':'symbol-narrow':'1.2-2'}}</li>
+            </ul>
+          </div>
+          <div class="col-6">
+            <ul class="list-group">
+              <li class="list-group-item py-1">Date Time : {{purchase.created_at | date:'medium'}}</li>
+              <li class="list-group-item py-1">User : {{purchase.created_by}}</li>
+              <li class="list-group-item p-0">
+                <button type="button" *ngIf="purchase.items.length === 0" (click)="onShowPurchaseItem(purchase)" class="billitembutton btn btn-sm btn-outline-success btn-block text-uppercase border-0 mx-0 py-1">
+                  <fa name="eye"></fa>
+                  Details
+                </button>
+                <button type="button" *ngIf="purchase.items.length != 0" (click)="onHidePurchaseItem(purchase)" class="billitembutton btn btn-sm btn-outline-danger btn-block text-uppercase border-0 mx-0 py-1">
+                    <fa name="eye-slash"></fa>
+                    Details
+                  </button> 
+              </li>
+            </ul>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover table-sm bg-white mb-0 mt-3" *ngIf="purchase.items.length > 0">
+            <thead>
+              <tr class="text-primary font-italic">
+                <td scope="col">#</td>
+                <td scope="col">Item</td>
+                <td scope="col">Tax %</td>
+                <td scope="col">Unit Price</td>
+                <td scope="col">Quantity</td>
+                <td scope="col">Total</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let purchaseitem of purchase.items; let i = index">
+                <td scope="row">{{i+1}}</td>
+                <td>{{purchaseitem.prodname }}</td>
+                <td>{{purchaseitem.tax | determine}}</td>
+                <td>{{purchaseitem.unitprice | currency:'INR':'symbol-narrow':'1.2-2'}}</td>
+                <td>{{purchaseitem.quantity}}</td>
+                <td>{{purchaseitem.unitprice*purchaseitem.quantity | currency:'INR':'symbol-narrow':'1.2-2'}}</td>
+              </tr>
+            </tbody>
+          </table>
+      </li>
+    </ul>
+  </div>
+</div>

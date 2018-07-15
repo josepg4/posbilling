@@ -15,7 +15,7 @@ app-root {
     width: 100%;
 }
 
-app-dashboard,app-inventory,app-items,app-billing,app-billhistory {
+app-dashboard,app-inventory,app-items,app-billing,app-billhistory,app-purchase,app-purchasehistory,app-settings  {
     vertical-align: top;
     position: absolute;
     left: 150px;
@@ -81,9 +81,23 @@ ng-select.form-control > .ng-select-dropdown-outer .ng-select-dropdown .ng-optio
 }
 
 ::-webkit-scrollbar {
-    display: none;
+display: none;
+}
+
+ng-datepicker, .my-date-picker > .ngx-datepicker-container {
+    display: inline;
+    background-color: #394044;
 }
 
 ng-datepicker, .my-date-picker > .ngx-datepicker-container .ngx-datepicker-input {
-    width : 100% !important;
+    margin-bottom: 0.25rem;
+    margin-right: 0.5rem;
+    border-radius: 6px !important;
+    border-color: #7ED3E9 !important;
+    background-color: #394044;
+    color:#7ED3E9 !important;
+}
+
+ng-datepicker, .my-date-picker > .ngx-datepicker-container .ngx-datepicker-calendar-container {
+    z-index: 50;
 }

@@ -3,13 +3,10 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import {
-  InventorydataService
-} from '../../services/inventorydata.service';
+import { InventorydataService } from '../../services/inventorydata.service';
+import { StaticdataholdingService } from '../../services/staticdataholding.service';
 
-import {
-  Item
-} from '../../models/Item';
+import { Item } from '../../models/Item';
 
 @Component({
   selector: 'app-items',
@@ -43,7 +40,7 @@ export class ItemsComponent implements OnInit {
     updated_by: null
   };
 
-  constructor(private _inventorydataService: InventorydataService) {}
+  constructor(private _inventorydataService: InventorydataService, private _staticdataService: StaticdataholdingService) {}
 
   ngOnInit() {
     this._inventorydataService.getInventory().subscribe(items => {
@@ -54,15 +51,9 @@ export class ItemsComponent implements OnInit {
         this.currentItem.prodid = 'P' + (itemid.prodid + 1).toString();
       }
     });
-    this._inventorydataService.getCategory().subscribe(category => {
-      this.categories = category;
-    });
-    this._inventorydataService.getOffers().subscribe(offers => {
-      this.offers = offers;
-    })
-    this._inventorydataService.getTaxes().subscribe(taxes => {
-      this.taxes = taxes;
-    })
+    this.categories = this._staticdataService.getCategory()
+    this.offers = this._staticdataService.getOffers()
+    this.taxes = this._staticdataService.getTaxes()
   }
 
 

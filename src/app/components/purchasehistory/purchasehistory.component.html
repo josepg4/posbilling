@@ -1,0 +1,14 @@
+<div class="container-fluid">
+  <div class="row py-2 title-bar mb-3">
+      <div class="col">
+        <h4 class="d-inline mr-3">Purchase History</h4>
+        <span class="d-inline mr-1"><fa name="calendar-o"></fa></span>
+        <ng-datepicker class="my-date-picker ontop-fifty" [(ngModel)]="dateFrom"></ng-datepicker>
+        <span class="d-inline mr-2"><fa name="arrow-right"></fa></span>
+        <span class="d-inline mr-1"><fa name="calendar-o"></fa></span>
+        <ng-datepicker class="my-date-picker ontop-fifty" [(ngModel)]="dateTo"></ng-datepicker>
+        <button type="button" (click)="getPurchases()" class="btn btn-sm btn-info btn-inline-block mb-1 mr-3">Show</button>
+      </div>
+    </div>
+    <app-puchasehistorypagination [data]="purchases" (showPurchaseItem)="onShowPurchaseItem($event)" (hidePurchaseItem)="onHidePurchaseItem($event)"></app-puchasehistorypagination>
+</div>

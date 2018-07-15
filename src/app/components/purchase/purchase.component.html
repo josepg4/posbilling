@@ -1,0 +1,143 @@
+<div class="container-fluid">
+  <div class="row py-2 title-bar inline-header">
+    <div class="col">
+      <h4>Purchase</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card card-body p-2 mt-0 mb-3">
+      <div class="form-row">
+        <div class="input-group input-group-sm  col-1">
+          <div class="input-group-prepend">
+            <div class="input-group-text">ID</div>
+          </div>
+          <input type="text" class="form-control" placeholder="" [(ngModel)]="purchaseItem.prodid" disabled>
+        </div>
+        <div class="input-group input-group-sm inventory-filter col-3">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Item</div>
+          </div>
+          <ng-select class="form-control" placeholder="Item" [items]="inventory" bindLabel="prodname" [(ngModel)]="selectedItem" (change)="itemSelected(selectedItem)"
+            [disabled]="isPurchaseSaved">
+          </ng-select>
+        </div>
+        <div class="input-group input-group-sm col-1">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Tax</div>
+          </div>
+          <input type="text" class="form-control" placeholder="" [(ngModel)]="purchaseItem.tax" disabled>
+        </div>
+        <div class="input-group input-group-sm col-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Quantity</div>
+          </div>
+          <input type="number" class="form-control" placeholder="" [(ngModel)]="purchaseItem.quantity" [disabled]="!selectedItem" (blur)="onQuantityChange()" min="0">
+        </div>
+        <div class="input-group input-group-sm col-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Unit Price</div>
+          </div>
+          <input type="number" class="form-control" placeholder="" [(ngModel)]="purchaseItem.unitprice" [disabled]="!selectedItem" (blur)="onQuantityChange()" min="0" step=".01">
+        </div>
+        <div class="input-group input-group-sm col-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">Total</div>
+          </div>
+          <input type="number" class="form-control" placeholder="" [(ngModel)]="purchaseItem.total" min="0" step=".01" disabled>
+        </div>
+        <div class="input-group input-group-sm col-1">
+          <button type="submit" (click)="onNewPurchaseItem()" class="btn btn-sm btn-outline-primary btn-block" [disabled]="!selectedItem">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showError" class="row">
+    <div class="col">
+      <div class="alert alert-danger" role="alert">
+        {{message}}
+      </div>
+    </div>
+  </div>
+  <div class="row bill-items">
+    <div class="col-12">
+      <table class="table table-bordered table-hover table-sm bg-white mb-0">
+        <thead>
+          <tr class="text-primary font-italic">
+            <td scope="col">#</td>
+            <td scope="col">Item Name</td>
+            <td scope="col">Selling Price</td>
+            <td scope="col">Discount</td>
+            <td scope="col">Tax</td>
+            <td scope="col">Unit Price</td>
+            <td scope="col">Quantity</td>
+            <td scope="col">Total</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="purchase.items.length === 0">
+            <td class="text-center" scope="row" colspan="8">No Items Added !!!</td> 
+          </tr>
+          <tr *ngFor="let purchaseitem of purchase.items, let i = index">
+            <td scope="row">{{i+1}}</td>
+            <td>{{purchaseitem.prodname}}</td>
+            <td>{{purchaseitem.sellingprice | currency:'INR':'symbol-narrow':'1.2-2'}}</td>
+            <td [innerHTML]="purchaseitem.hasoff | offer:purchaseitem.offtype:purchaseitem.discount"></td>
+            <td>{{purchaseitem.tax | determine}}</td>
+            <td>{{purchaseitem.unitprice | currency:'INR':'symbol-narrow':'1.2-2'}}</td>
+            <td>{{purchaseitem.quantity }}</td>
+            <td>
+              {{purchaseitem.total | currency:'INR':'symbol-narrow':'1.2-2'}}
+              <div class="btn btn-outline-danger removeitem float-right" (click)="onPurchaseItemRemove(purchaseitem)">
+                <fa name="close"></fa>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="mx-0 bill-bottom bg-white py-2">
+    <div class="row">
+      <div class="col">
+          <table  class="table borderless bg-white mb-0">
+              <tbody>
+                <tr>
+                  <td rowspan="2" class="py-1">
+                      <h4># {{purchase.purchaseid}}
+                          <small *ngIf="purchase.items.length === 0" class="text-muted">No Items Added</small>
+                          <small *ngIf="purchase.items.length === 1" class="text-muted">Total {{purchase.items.length}} Item</small>
+                          <small *ngIf="purchase.items.length > 1" class="text-muted">Total {{purchase.items.length}} Items</small>
+                        </h4>
+                  </td>
+                  <td class="py-1 text-uppercase text-center">
+                  </td>
+                  <td class="py-1 text-uppercase text-center">
+                      <h6>Discount on bill</h6>
+                  </td>
+                  <td class="py-1 text-uppercase text-center">
+                      <h6>TOTAL</h6>
+                  </td>
+                  <td class="py-1">
+                      <button type="button" (click)="onNewPurchase()" class="btn btn-sm btn-primary btn-block" [disabled]="purchase.items.length < 1 || onDC || isPurchaseSaved">Save</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-1 text-center">
+                    
+                  </td>
+                  <td class="py-1 text-center">
+                    <input type="number" [(ngModel)]="purchase.discount">
+                  </td>
+                  <td class="py-1 text-center">
+                      <h2>{{purchase.total | currency:'INR':'symbol-narrow':'1.2-2'}}</h2>
+                  </td>
+                  <td class="py-1">
+                      <button type="button" (click)="onClearPurchase()" class="btn btn-sm btn-secondary btn-block" [disabled]="!isPurchaseSaved || onDC">New</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+      </div>
+    </div>
+  </div>
+</div>

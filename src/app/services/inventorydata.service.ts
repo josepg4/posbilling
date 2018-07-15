@@ -8,6 +8,7 @@ import {ElectronService} from 'ngx-electron';
 import { Item } from '../models/Item';
 import { Bill, BillingItem } from '../models/Bill';
 import { Tax } from '../models/Tax';
+import { Purchase, PurchaseItem } from '../models/Purchase';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
@@ -29,6 +30,12 @@ export class InventorydataService {
   taxURL : string = 'http://localhost:3000/api/tax';
   categoryURL : string = 'http://localhost:3000/api/category';
   offerURL : string = 'http://localhost:3000/api/offers';
+  purchaseURL : string = 'http://localhost:3000/api/purchase';
+  purchaseItemURL : string = 'http://localhost:3000/api/purchaseitems';
+  usersURL : string = 'http://localhost:3000/api/users';
+  userURL : string = 'http://localhost:3000/api/user';
+  editUserURL : string = 'http://localhost:3000/api/updateuser';
+  removeUserURL = 'http://localhost:3000/api/removeuser';
 
   inventory : Item[] = [];
   updatedItem : Item;
@@ -48,11 +55,22 @@ export class InventorydataService {
         this.taxURL = 'http://localhost:' + this.port+ '/api/tax';
         this.categoryURL = 'http://localhost:' + this.port+ '/api/category';
         this.offerURL = 'http://localhost:' + this.port+ '/api/offers';
-        this._router.navigateByUrl('/dashboard');
+        this.purchaseURL = 'http://localhost:' + this.port+ '/api/purchase';
+        this.purchaseItemURL = 'http://localhost:' + this.port+ '/api/purchaseitems';
+        this.usersURL = 'http://localhost:' + this.port+ '/api/users';
+        this.userURL = 'http://localhost:' + this.port+ '/api/user';
+        this.editUserURL = 'http://localhost:' + this.port +'/api/updateuser';
+        this.removeUserURL = 'http://localhost:' + this.port +'/api/removeuser';
       })
       this._electronService.ipcRenderer.send('portready', this.port);
     });
-    
+    this._electronService.ipcRenderer.on('readytoshow', (event, port) => {
+      this._ngZone.run(()=> {
+        this._router.navigateByUrl('/inventory');
+        console.log("inside ready to show")
+      })
+      this._electronService.ipcRenderer.send('windowreadytoshow', this.port);
+    });
   }
 
   getInventory(): Observable<Item[]> {
@@ -87,20 +105,36 @@ export class InventorydataService {
     return this._http.get<BillingItem[]>(this.billItemsURL, {params : {billid : billId}})
   }
 
-  getTaxes(): Observable<Tax[]> {
-    return this._http.get<Tax[]>(this.taxURL);
+  newPurchase(purchase : Purchase) : Observable<any>{
+    return this._http.post<any>(this.purchaseURL, purchase, httpOptions)
+  }
+
+  getPurchase(parameters: {dateFrom : string, dateTo : string}) : Observable<any>{
+    return this._http.get<any>(this.purchaseURL, {params: parameters})
+  }
+
+  getPurchaseItems(purchaseId : string) : Observable<PurchaseItem[]>{
+    return this._http.get<PurchaseItem[]>(this.purchaseItemURL, {params : {purchaseid : purchaseId}})
   }
 
   removeTax(id : number): Observable<any> {
     return this._http.delete<any>(this.taxURL + "/?id=" + id, httpOptions)
   }
-
-  getCategory(): Observable<any[]> {
-    return this._http.get<any[]>(this.categoryURL);
+  
+  getUsers(): Observable<any[]> {
+    return this._http.get<any[]>(this.usersURL)
   }
 
-  getOffers(): Observable<any[]> {
-    return this._http.get<any[]>(this.offerURL);
+  newUser(user : any) : Observable<any>{
+    return this._http.post<any>(this.userURL, user, httpOptions)
+  }
+
+  updateUser(user : any) : Observable<any>{
+    return this._http.post<any>(this.editUserURL, user, httpOptions)
+  }
+
+  removeUser(user : any) : Observable<any>{
+    return this._http.post<any>(this.removeUserURL, user, httpOptions)
   }
 
 

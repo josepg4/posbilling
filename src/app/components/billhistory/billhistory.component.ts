@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  InventorydataService
-} from '../../services/inventorydata.service';
+import { InventorydataService } from '../../services/inventorydata.service';
 
 import { Bill, BillingItem } from '../../models/bill';
 
@@ -55,12 +53,13 @@ export class BillhistoryComponent implements OnInit {
   }
 
   dateToQueryObject(dateFrom: Date, dateTo: Date): any {
+    let dataToEnd = new Date(dateTo);
     dateFrom.setHours(0, 0, 0, 0);
-    dateTo.setDate(dateTo.getDate() + 1);
-    dateTo.setHours(0, 0, 0, 0);
+    dataToEnd.setDate(dataToEnd.getDate() + 1);
+    dataToEnd.setHours(0, 0, 0, 0);
     return {
       dateFrom: dateFrom.toISOString().substr(0, 10) + ' ' + dateFrom.toISOString().substr(11, 8),
-      dateTo: dateTo.toISOString().substr(0, 10) + ' ' + dateTo.toISOString().substr(11, 8)
+      dateTo: dataToEnd.toISOString().substr(0, 10) + ' ' + dataToEnd.toISOString().substr(11, 8)
     }
   }
 

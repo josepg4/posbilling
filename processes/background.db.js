@@ -32,13 +32,18 @@ app.use(function (req, res, next) {
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get('/api/inventory', getInventory)
+app.get('/api/inventorynew', getNewInventory)
 app.post('/api/item', addToInventory)
 app.post('/api/itemedit', editInventory)
-app.post('/api/itemremove', removeInventory);
+app.post('/api/itemremove', removeInventory)
 
 app.get('/api/bill', getBill)
 app.get('/api/billitems', getBillItems)
 app.post('/api/newbill', addToBill)
+
+app.get('/api/purchase', getPurchase)
+app.get('/api/purchaseitems', getPurchaseItems)
+app.post('/api/purchase', addToPurchase)
 
 app.get('/api/tax', getTax)
 app.post('/api/tax', addNewTax)
@@ -54,6 +59,7 @@ app.delete('/api/offers', removeOffer)
 
 app.get('/api/users', getUsers)
 app.post('/api/user', addNewUser)
+app.post('/api/updateuser', updateUser)
 app.post('/api/removeuser', removeUser)
 
 app.get('/api/storeid', getStoreId)
@@ -104,6 +110,7 @@ function removeTax(req, res, next){
 function getUsers(req, res, next){
     knex('users')
         .select()
+        .where('active', true)
         .then(response => {
             res.status(200).json(response);
         })
@@ -182,10 +189,28 @@ function addNewUser(req, res, next){
             active   : true
         }])
         .then(response => {
-            res.status(200).json(response);
+            getUsers(req, res, next);
+            //res.status(200).json(response);
         })
         .catch(error => {
             console.log(error)
+            res.status(200).json({status : 'failed'})
+        })
+}
+
+function updateUser(req, res, next){
+    let data = req.body;
+    knex('users')
+        .where('username', data.username)
+        .update({
+            "password" : data.password,
+            "canedit"  : data.canedit
+        })
+        .then(response => {
+            res.status(200).json({status: 'success'});
+        })
+        .catch(error => {
+            console.log(error);
             res.status(200).json({status : 'failed'})
         })
 }
@@ -196,7 +221,7 @@ function removeUser(req, res, next){
         .where('id', data.id)
         .update('active', false)
         .then(response => {
-            res.status(200).json(response);
+            res.status(200).json({status: 'success'});
         })
         .catch(error => {
             console.log(error)
@@ -291,7 +316,39 @@ function getBill(req, res, next){
         })
 }
 
-function getInventory(req, res, next) {
+function getNewInventory(req, res, next) {
+    console.log("inside");
+    knex.select(
+            "i.prodid",
+            "i.prodname",
+            "i.proddisc",
+            "i.stock",
+            "i.unitprice",
+            "c.name AS category",
+            "t.taxname",
+            "t.taxvalue",
+            "i.hasoff",
+            "i.offtype",
+            "i.offvalue",
+            "i.updated_by",
+            "i.updated_at"
+        )
+        .from('inventory AS i')
+        .where('isremoved', false)
+        .leftJoin('category AS c', 'i.category', 'c.id')
+        .leftJoin('taxes AS t', 'i.tax', 't.taxid')
+        .then(function (response) {
+            console.log(response)
+            for (let i = 0; i < response.length; i++) {
+                response[i].updated_at = response[i].updated_at + ' UTC';
+            }
+            res.status(200).json(response);
+            next();
+        });
+}
+
+function getInventory(req, res, next){
+    console.log("inside i");
     knex('inventory')
         .where('isremoved', false)
         .select()
@@ -445,6 +502,83 @@ function addToBill(req, res, next) {
         })
 }
 
+function addToPurchase(req, res, next) {
+    console.log("here")
+    let purchase = req.body;
+    let arrPurchase = [];
+    let arrInventory = [];
+    knex('purchase')
+        .insert({
+            "purchaseid": purchase.purchaseid,
+            "discount": purchase.discount,
+            "total": purchase.total,
+            "created_by": "gj"
+        })
+        .then(response => {
+            return knex('storeid')
+                .where("key", "storeidkey")
+                .increment('purchaseid', 1)
+        })
+        .then(response => {
+            purchase.items.forEach(item => {
+                arrPurchase.push(
+                    knex('purchaseitems')
+                    .insert({
+                        "purchaseid": purchase.purchaseid,
+                        "prodid": item.prodid,
+                        "quantity": item.quantity,
+                        "unitprice": item.unitprice,
+                    })
+                )
+            })
+            return Promise.all(arrPurchase);
+        })
+        .then(response => {
+            purchase.items.forEach(item => {
+                arrInventory.push(
+                    knex('inventory')
+                    .where("prodid", item.prodid)
+                    .increment("stock", item.quantity)
+                )
+            })
+            return Promise.all(arrInventory);
+        })
+        .then(response => {
+            console.log(response);
+            res.status(200).json(response);
+        })
+}
+
+function getPurchase(req, res, next){
+    knex('purchase')
+        .whereNot("created_at" , "<", req.query.dateFrom)
+        .andWhereNot("created_at" , ">", req.query.dateTo)
+        .select()
+        .then(response => {
+            for (let i = 0; i < response.length; i++) {
+                response[i].created_at = response[i].created_at + ' UTC';
+                response[i].items = [];
+            }
+            res.status(200).json(response);
+        })
+        .catch(error => {
+            res.status(200);
+        })
+}
+
+function getPurchaseItems(req, res, next) {
+    knex('purchaseitems')
+        .where("purchaseid", req.query.purchaseid)
+        .join("inventory", "purchaseitems.prodid", "inventory.prodid")
+        .select('purchaseitems.prodid', 'inventory.prodname', 'purchaseitems.quantity', 'inventory.tax', 'purchaseitems.unitprice')
+        .then(response => {
+            res.status(200).json(response);
+        })
+        .catch(error => {
+            req.status(200).json({status: 'error'});
+        })
+}
+
 function createTables() {
 
     knex.schema.hasTable('storeid')
@@ -455,7 +589,7 @@ function createTables() {
                     table.string("key");
                     table.integer("prodid");
                     table.integer("billid");
-                    table.integer("puchaseid");
+                    table.integer("purchaseid");
                     table.integer("offerid");
                     table.timestamp("updated_at").defaultTo(knex.fn.now());
                 });
@@ -620,6 +754,66 @@ function createTables() {
             }
         })
 
+    knex.schema.hasTable('purchase')
+        .then(function (exists) {
+            if(!exists){
+                return knex.schema.createTable('purchase', function (table){
+                    table.increments('id');
+                    table.string('purchaseid');
+                    table.float('total');
+                    table.float('discount');
+                    table.string("created_by");
+                    table.timestamp("created_at").defaultTo(knex.fn.now());
+                    table.unique('purchaseid');
+                })
+            }
+        })
+        .then(response => {
+            if (response) {
+                return knex('purchase')
+                    .insert({
+                        "purchaseid": "1"
+                    })
+            }
+        })
+        .then(response => {
+            if (response) {
+                return knex('purchase')
+                        .where("purchaseid", "1")
+                        .select("id")
+            }
+        })
+        .then(response => {
+            if (response) {
+                return knex('storeid')
+                    .where("key", "storeidkey")
+                    .update("purchaseid", response[0].id)
+            }
+        })
+        .then(response => {
+            if (response) {
+                return knex('purchase')
+                    .where("purchaseid", "1")
+                    .del()
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        })
+
+    knex.schema.hasTable('purchaseitems')
+        .then(function (exists) {
+            if (!exists) {
+                return knex.schema.createTable('purchaseitems', function (table) {
+                    table.increments();
+                    table.string("purchaseid");
+                    table.string("prodid");
+                    table.integer("quantity");
+                    table.float("unitprice");
+                })
+            }
+        })
+
     knex.schema.hasTable('taxes')
         .then(function (exists) {
             if (!exists) {
@@ -635,9 +829,24 @@ function createTables() {
         .then(response => {
             if(response){
                 return knex('taxes')
-                        insert([{
+                        .insert([{
                             taxname : 'None',
                             taxvalue: 0
+                        },{
+                            taxname : 'GST @ 0%',
+                            taxvalue: 0
+                        },{
+                            taxname : 'GST @ 5%',
+                            taxvalue: 5
+                        },{
+                            taxname : 'GST @ 10%',
+                            taxvalue: 10
+                        },{
+                            taxname : 'GST @ 18%',
+                            taxvalue: 18
+                        },{
+                            taxname : 'GST @ 28%',
+                            taxvalue: 28
                         }])
             }
         })
@@ -663,7 +872,16 @@ function createTables() {
                            .insert([{
                                 name : 'None',
                                 count: 0
-                           }])
+                           },{
+                            name : 'Category 1',
+                            count: 1
+                       },{
+                        name : 'Category 2',
+                        count: 2
+                   },{
+                    name : 'Category 3',
+                    count: 3
+               }])
             }
         })
         .catch(error => {
