@@ -46,8 +46,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let user of users | paginate: configuser" class="m-0">
-                  <td scope="row">{{user.id}}</td>
+                <tr *ngFor="let i=index; let user of users | paginate: configuser" class="m-0">
+                  <td scope="row">{{i+1}}</td>
                   <td>{{user.username}}</td>
                   <td class="col-canedit">
                     <div class="canedit-val">{{user.canedit?'Yes':'No'}}</div>

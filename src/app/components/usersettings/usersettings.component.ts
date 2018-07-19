@@ -117,9 +117,10 @@ export class UsersettingsComponent implements OnInit {
       this._ngZone.run(() => {
         if(response === 0){
           this._inventorydataService.removeUser(user).subscribe(result => {
+            console.log(result);
             if(result.status == 'success'){
               this._inventorydataService.getUsers().subscribe(users => {
-                this.users = users;
+                this.users = users.data;
               })
             }else{
     

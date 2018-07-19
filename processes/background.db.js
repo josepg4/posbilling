@@ -24,6 +24,7 @@ app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
@@ -51,6 +52,7 @@ app.delete('/api/tax', removeTax)
 
 app.get('/api/category', getCategory)
 app.post('/api/category', addToCategory)
+app.post('/api/updatecategory', updateCategory)
 app.delete('/api/category', removeCategory)
 
 app.get('/api/offers', getOffers)
@@ -231,13 +233,30 @@ function removeUser(req, res, next){
 
 function getCategory(req, res, next){
     knex('category')
-      .select('id', 'name')
+      .select('id', 'name', 'description')
       .then(response => {
           res.status(200).json({status : 'success', data : response});
       })
       .catch(error => {
           res.status(200).json({status : 'failed'});
       })
+}
+
+function updateCategory(req, res, next){
+    let data = req.body;
+    knex('category')
+        .where('id', data.id)
+        .update({
+            "name" : data.name,
+            "description"  : data.description
+        })
+        .then(response => {
+            getCategory(req, res, next);
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(200).json({status : 'failed'})
+        })
 }
 
 function removeCategory(req, res, next){  
@@ -262,6 +281,7 @@ function addToCategory(req, res, next){
     knex('category')
         .insert([{
             name : data.name,
+            description : data.description,
             count: 0
         }])
         .then(response => {
@@ -882,6 +902,23 @@ function createTables() {
                     name : 'Category 3',
                     count: 3
                }])
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        })
+
+    knex.schema.hasColumn('category', 'description')
+        .then(function (exists) {
+            if(!exists) {
+                return knex.schema.table('category', function (table) {
+                    table.string('description')
+                })
+            }
+        })
+        .then(response => {
+            if(response){
+                console.log(response);
             }
         })
         .catch(error => {

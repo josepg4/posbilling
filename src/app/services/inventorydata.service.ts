@@ -29,6 +29,7 @@ export class InventorydataService {
   billItemsURL : string = 'http://localhost:3000/api/billitems';
   taxURL : string = 'http://localhost:3000/api/tax';
   categoryURL : string = 'http://localhost:3000/api/category';
+  updateCategoryURL : string = 'http://localhost:3000/api/updatecategory';
   offerURL : string = 'http://localhost:3000/api/offers';
   purchaseURL : string = 'http://localhost:3000/api/purchase';
   purchaseItemURL : string = 'http://localhost:3000/api/purchaseitems';
@@ -61,6 +62,7 @@ export class InventorydataService {
         this.userURL = 'http://localhost:' + this.port+ '/api/user';
         this.editUserURL = 'http://localhost:' + this.port +'/api/updateuser';
         this.removeUserURL = 'http://localhost:' + this.port +'/api/removeuser';
+        this.updateCategoryURL = 'http://localhost:' + this.port + '/api/updatecategory';
       })
       this._electronService.ipcRenderer.send('portready', this.port);
     });
@@ -141,5 +143,15 @@ export class InventorydataService {
     return this._http.get<any>(this.categoryURL)
   }
 
+  newCategory(category : any) : Observable<any>{
+    return this._http.post<any>(this.categoryURL, category, httpOptions)
+  }
 
+  updateCategory(category : any) : Observable<any>{
+    return this._http.post<any>(this.updateCategoryURL, category, httpOptions)
+  }
+
+  removeCategory(id : number): Observable<any> {
+    return this._http.delete<any>(this.categoryURL + "/?id=" + id, httpOptions)
+  }
 }
