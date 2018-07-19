@@ -121,8 +121,8 @@ export class InventorydataService {
     return this._http.delete<any>(this.taxURL + "/?id=" + id, httpOptions)
   }
   
-  getUsers(): Observable<any[]> {
-    return this._http.get<any[]>(this.usersURL)
+  getUsers(): Observable<any> {
+    return this._http.get<any>(this.usersURL)
   }
 
   newUser(user : any) : Observable<any>{
@@ -135,6 +135,10 @@ export class InventorydataService {
 
   removeUser(user : any) : Observable<any>{
     return this._http.post<any>(this.removeUserURL, user, httpOptions)
+  }
+
+  getCategory(): Observable<any> {
+    return this._http.get<any>(this.categoryURL)
   }
 
 

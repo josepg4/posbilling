@@ -112,7 +112,7 @@ function getUsers(req, res, next){
         .select()
         .where('active', true)
         .then(response => {
-            res.status(200).json(response);
+            res.status(200).json({status : "success", data : response});
         })
         .catch(error => {
             res.status(200).json({status : 'failed'});
@@ -233,7 +233,7 @@ function getCategory(req, res, next){
     knex('category')
       .select('id', 'name')
       .then(response => {
-          res.status(200).json(response);
+          res.status(200).json({status : 'success', data : response});
       })
       .catch(error => {
           res.status(200).json({status : 'failed'});
@@ -250,7 +250,7 @@ function removeCategory(req, res, next){
                     .update('category', parseInt(req.query.replace))
       })
       .then(response => {
-        res.status(200).json({id : parseInt(req.query.id), output : response})
+        res.status(200).json({status : 'success', id : parseInt(req.query.id), output : response})
       })
       .catch(error => {
           res.status(200).json({'status' : 'failed'})
@@ -269,10 +269,10 @@ function addToCategory(req, res, next){
                 .select()
         })
         .then(response => {
-            res.status(200).json(response);
+            res.status(200).json({status : 'success', data : response});
         })
         .catch(error => {
-            res.status(200).json({error : error});
+            res.status(200).json({status : 'failed', error : error});
         })
 }
 

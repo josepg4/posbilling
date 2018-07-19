@@ -11,7 +11,7 @@
       <div class="col-12 col-md-6">
         <div class="row">
           <div class="col pag-err">
-            <pagination-template #p="paginationApi" [id]="config.id" (pageChange)="config.currentPage = $event">
+            <pagination-template class="mr-2" #p="paginationApi" [id]="configuser.id" (pageChange)="configuser.currentPage = $event">
               <nav aria-label="...">
                 <ul class="pagination pagination-sm">
                   <li [class.disabled]="p.isFirstPage()" class="page-item">
@@ -46,7 +46,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let user of users | paginate: config" class="m-0">
+                <tr *ngFor="let user of users | paginate: configuser" class="m-0">
                   <td scope="row">{{user.id}}</td>
                   <td>{{user.username}}</td>
                   <td class="col-canedit">

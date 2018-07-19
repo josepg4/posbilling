@@ -7,14 +7,15 @@
 
 .pag-err {
     display : flex;
+    flex-wrap: wrap;
 }
 
 .err {
     flex : 1;
-    margin-left : 1em; 
-    padding-left: 0.75em;
+    padding: 0.4em;
     display: flex;
     align-items: center;
+    white-space: nowrap;
 }
 
 .add-btn{

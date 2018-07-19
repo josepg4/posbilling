@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, NgZone } from '@angular/core';
 import { PaginationInstance } from 'ngx-pagination';
-import {ElectronService} from 'ngx-electron';
+import { ElectronService } from 'ngx-electron';
 import { InventorydataService } from '../../services/inventorydata.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { InventorydataService } from '../../services/inventorydata.service';
 })
 export class UsersettingsComponent implements OnInit {
 
-  public config: PaginationInstance = {
+  public configuser: PaginationInstance = {
     id: 'custom',
     itemsPerPage: 5,
     currentPage: 1
@@ -33,8 +33,8 @@ export class UsersettingsComponent implements OnInit {
   constructor(private _inventorydataService: InventorydataService, private _electronService: ElectronService, private _ngZone: NgZone) { }
 
   ngOnInit() {
-    this._inventorydataService.getUsers().subscribe(users => {
-      this.users = users;
+    this._inventorydataService.getUsers().subscribe(response => {
+      this.users = response.data;
     })
   }
 
@@ -56,8 +56,14 @@ export class UsersettingsComponent implements OnInit {
     if(this.user.username && this.user.password){
       this.onDC = true;
       this._inventorydataService.newUser(this.user).subscribe(result => {
-        this.users = result;
-        this.user = this.getEmptyUser();
+        if(result.status == 'success'){
+          this.users = result.data;
+          this.user = this.getEmptyUser();
+          this.showMessage('Added User!', true)
+        }
+        else {
+          this.showMessage('Failed! try other UserName!', false)
+        }
       })
     }else {
 
@@ -82,6 +88,7 @@ export class UsersettingsComponent implements OnInit {
           this._inventorydataService.getUsers().subscribe(users => {
             this.users = users;
           })
+          this.isEdit = false;
         }else{
 
         }
