@@ -31,6 +31,7 @@ export class InventorydataService {
   categoryURL : string = 'http://localhost:3000/api/category';
   updateCategoryURL : string = 'http://localhost:3000/api/updatecategory';
   offerURL : string = 'http://localhost:3000/api/offers';
+  updateOfferURL : string = 'http://localhost:3000/api/updateoffer';
   purchaseURL : string = 'http://localhost:3000/api/purchase';
   purchaseItemURL : string = 'http://localhost:3000/api/purchaseitems';
   usersURL : string = 'http://localhost:3000/api/users';
@@ -56,6 +57,7 @@ export class InventorydataService {
         this.taxURL = 'http://localhost:' + this.port+ '/api/tax';
         this.categoryURL = 'http://localhost:' + this.port+ '/api/category';
         this.offerURL = 'http://localhost:' + this.port+ '/api/offers';
+        this.updateOfferURL = 'http://localhost:' + this.port+ '/updateoffer';
         this.purchaseURL = 'http://localhost:' + this.port+ '/api/purchase';
         this.purchaseItemURL = 'http://localhost:' + this.port+ '/api/purchaseitems';
         this.usersURL = 'http://localhost:' + this.port+ '/api/users';
@@ -153,5 +155,21 @@ export class InventorydataService {
 
   removeCategory(id : number, replace : number): Observable<any> {
     return this._http.delete<any>(this.categoryURL + "/?id=" + id + "&replace=" + replace, httpOptions)
+  }
+
+  getOffers() : Observable<any> {
+    return this._http.get<any>(this.offerURL);
+  }
+
+  newOffer(offer : any) : Observable<any>{
+    return this._http.post<any>(this.offerURL, offer, httpOptions)
+  }
+
+  updateOffer(offer : any) : Observable<any>{
+    return this._http.post<any>(this.updateOfferURL, offer, httpOptions)
+  }
+
+  removeOffer(id : number, replace : number): Observable<any> {
+    return this._http.delete<any>(this.offerURL + "/?id=" + id + "&replace=" + replace, httpOptions)
   }
 }

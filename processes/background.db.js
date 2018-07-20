@@ -57,6 +57,7 @@ app.delete('/api/category', removeCategory)
 
 app.get('/api/offers', getOffers)
 app.post('/api/offers', addNewOffer)
+app.post('/api/updateoffer', addNewOffer)
 app.delete('/api/offers', removeOffer)
 
 app.get('/api/users', getUsers)
@@ -125,7 +126,7 @@ function getOffers(req, res, next){
     knex('offers')
       .select('offerid', 'name', 'type', 'value')
       .then(response => {
-          res.status(200).json(response);
+          res.status(200).json({status : 'success', data : response});
       })
       .catch(error => {
           res.status(200).json({status : 'failed'});
@@ -151,12 +152,37 @@ function addNewOffer(req, res, next){
                     .increment('offerid', 1)
         })
         .then(response => {
-            res.status(200).json(response);
+            res.status(200).json({status : 'success', data : response});
         })
         .catch(error => {
             console.log(error)
             res.status(200).json({status : 'failed'})
         })
+}
+
+function updateOffer(req, res, next){
+    let data = req.body;
+    knex('offers')
+      .where('offerid', data.offerid)
+      .update({
+            'name' : data.name,
+            'type'  : data.type,
+            'value'  : data.value
+      })
+      .then(response => {
+          return knex('inventory')
+                    .where('hasoff', data.offerid)
+                    .update({
+                                'offtype': data.type,
+                                'offvalue' : value
+                            })
+      })
+      .then(response => {
+        res.status(200).json({status : 'success', output : response[0]})
+      })
+      .catch(error => {
+        res.status(200).json({status : 'failed'})
+      })
 }
 
 function removeOffer(req, res, next){  
@@ -173,10 +199,10 @@ function removeOffer(req, res, next){
                             })
       })
       .then(response => {
-        res.status(200).json({id : parseInt(req.query.id), output : response})
+        res.status(200).json({status : 'success',id : parseInt(req.query.id), output : response})
       })
       .catch(error => {
-          res.status(200).json({'status' : 'failed'})
+          res.status(200).json({status : 'failed'})
       })
 }
 

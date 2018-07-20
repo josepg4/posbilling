@@ -43,16 +43,26 @@ export class ItemsComponent implements OnInit {
   constructor(private _inventorydataService: InventorydataService, private _staticdataService: StaticdataholdingService) {}
 
   ngOnInit() {
-    this._inventorydataService.getInventory().subscribe(items => {
-      this.inventory = items;
-    });
+    this._inventorydataService.getOffers().subscribe(response => {
+      console.log(response)
+      if(response.status == 'success'){
+        this.offers = response.data;
+        this._inventorydataService.getInventory().subscribe(items => {
+          this.inventory = items;
+        })
+      }
+    })
+    this._inventorydataService.getCategory().subscribe(categories => {
+      if(categories.status == 'success'){
+        this.categories = categories.data;
+      }
+    })
+    
     this._inventorydataService.getstoredId().subscribe(itemid => {
       if(!this.isEdit){
         this.currentItem.prodid = 'P' + (itemid.prodid + 1).toString();
       }
     });
-    this.categories = this._staticdataService.getCategory()
-    this.offers = this._staticdataService.getOffers()
     this.taxes = this._staticdataService.getTaxes()
   }
 
