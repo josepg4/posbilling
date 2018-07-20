@@ -151,7 +151,7 @@ export class InventorydataService {
     return this._http.post<any>(this.updateCategoryURL, category, httpOptions)
   }
 
-  removeCategory(id : number): Observable<any> {
-    return this._http.delete<any>(this.categoryURL + "/?id=" + id, httpOptions)
+  removeCategory(id : number, replace : number): Observable<any> {
+    return this._http.delete<any>(this.categoryURL + "/?id=" + id + "&replace=" + replace, httpOptions)
   }
 }
