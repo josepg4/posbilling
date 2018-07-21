@@ -57,7 +57,7 @@ app.delete('/api/category', removeCategory)
 
 app.get('/api/offers', getOffers)
 app.post('/api/offers', addNewOffer)
-app.post('/api/updateoffer', addNewOffer)
+app.post('/api/updateoffer', updateOffer)
 app.delete('/api/offers', removeOffer)
 
 app.get('/api/users', getUsers)
@@ -152,7 +152,7 @@ function addNewOffer(req, res, next){
                     .increment('offerid', 1)
         })
         .then(response => {
-            res.status(200).json({status : 'success', data : response});
+            getOffers(req, res, next);
         })
         .catch(error => {
             console.log(error)
@@ -174,7 +174,7 @@ function updateOffer(req, res, next){
                     .where('hasoff', data.offerid)
                     .update({
                                 'offtype': data.type,
-                                'offvalue' : value
+                                'offvalue' : data.value
                             })
       })
       .then(response => {

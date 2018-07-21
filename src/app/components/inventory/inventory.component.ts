@@ -26,7 +26,11 @@ export class InventoryComponent implements OnInit {
       this.inventory = items;
       this.inventorySorted = items;
     });
-    this.categories = this._staticdataService.getCategory()
+    this._inventorydataService.getCategory().subscribe(response => {
+      if(response.status = 'success'){
+        this.categories = response.data;
+      }
+    })
   }
     
   fireevent (){

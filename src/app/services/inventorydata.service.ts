@@ -57,7 +57,7 @@ export class InventorydataService {
         this.taxURL = 'http://localhost:' + this.port+ '/api/tax';
         this.categoryURL = 'http://localhost:' + this.port+ '/api/category';
         this.offerURL = 'http://localhost:' + this.port+ '/api/offers';
-        this.updateOfferURL = 'http://localhost:' + this.port+ '/updateoffer';
+        this.updateOfferURL = 'http://localhost:' + this.port+ '/api/updateoffer';
         this.purchaseURL = 'http://localhost:' + this.port+ '/api/purchase';
         this.purchaseItemURL = 'http://localhost:' + this.port+ '/api/purchaseitems';
         this.usersURL = 'http://localhost:' + this.port+ '/api/users';
