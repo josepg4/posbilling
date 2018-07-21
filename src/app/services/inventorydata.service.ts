@@ -121,10 +121,6 @@ export class InventorydataService {
     return this._http.get<PurchaseItem[]>(this.purchaseItemURL, {params : {purchaseid : purchaseId}})
   }
 
-  removeTax(id : number): Observable<any> {
-    return this._http.delete<any>(this.taxURL + "/?id=" + id, httpOptions)
-  }
-  
   getUsers(): Observable<any> {
     return this._http.get<any>(this.usersURL)
   }
@@ -171,5 +167,17 @@ export class InventorydataService {
 
   removeOffer(id : number, replace : number): Observable<any> {
     return this._http.delete<any>(this.offerURL + "/?id=" + id + "&replace=" + replace, httpOptions)
+  }
+
+  getTaxes() : Observable<any>{
+    return this._http.get<any>(this.taxURL);
+  }
+
+  newTax(tax : any ) : Observable<any>{
+    return this._http.post<any>(this.taxURL, tax, httpOptions);
+  }
+
+  removeTax(id : number, replace : number): Observable<any> {
+    return this._http.delete<any>(this.taxURL + "/?id=" + id  + "&replace=" + replace, httpOptions)
   }
 }

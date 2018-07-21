@@ -77,6 +77,17 @@ function getStoreId(req, res, next){
         })
 }
 
+function getTax(req, res, next){
+    knex('taxes')
+      .select('taxid', 'taxname', 'taxvalue')
+      .then(response => {
+          res.status(200).json({status : 'success', data : response});
+      })
+      .catch(error => {
+          res.status(200).json({status : 'failed'});
+      })
+}
+
 function addNewTax(req, res, next){
     let data = req.body;
     knex('taxes')
@@ -85,11 +96,11 @@ function addNewTax(req, res, next){
             taxvalue: data.taxvalue
         }])
         .then(response => {
-            res.status(200).json(response);
+            getTax(req, res, next)
         })
         .catch(error => {
             console.log(error)
-            res.status(200).json({err : error});
+            res.status(200).json({status : 'failed', err : error});
         })
 }
 
@@ -103,10 +114,10 @@ function removeTax(req, res, next){
                     .update('tax', parseInt(req.query.replace))
       })
       .then(response => {
-        res.status(200).json({id : parseInt(req.query.id), output : response})
+        res.status(200).json({status : 'success', id : parseInt(req.query.id), output : response})
       })
       .catch(error => {
-          res.status(200).json({'status' : 'failed'})
+          res.status(200).json({status : 'failed'})
       })
 }
 
@@ -320,17 +331,6 @@ function addToCategory(req, res, next){
         .catch(error => {
             res.status(200).json({status : 'failed', error : error});
         })
-}
-
-function getTax(req, res, next){
-    knex('taxes')
-      .select('taxid', 'taxname', 'taxvalue')
-      .then(response => {
-          res.status(200).json(response);
-      })
-      .catch(error => {
-          res.status(200).json({status : 'failde'});
-      })
 }
 
 function getBillItems(req, res, next) {

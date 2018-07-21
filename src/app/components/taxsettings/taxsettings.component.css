@@ -1,0 +1,47 @@
+.category-header{
+    display: flex;
+    padding-top : 0.25em;
+    padding-bottom: 0.25em;
+    align-items: center;
+}
+
+.pag-err {
+    display : flex;
+    flex-wrap: wrap;
+}
+
+.err {
+    flex : 1;
+    padding: 0.4em;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.add-btn{
+    margin-left: auto;
+}
+
+.heading{
+    font-size: 1.2em;
+}
+
+.col-description{
+    display: flex;
+    padding-right: 0.5em;
+}
+
+.description{
+    flex : 1;
+}
+
+.btn.removeitem {
+    font-size: 0.9em;
+    margin-left: 0.5em;
+    margin-right: 0em;
+    padding: .2em;
+    max-height: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
