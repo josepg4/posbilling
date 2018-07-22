@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 import { InventorydataService } from '../../services/inventorydata.service';
 import { StaticdataholdingService } from '../../services/staticdataholding.service';
+import { ElectronService } from 'ngx-electron';
 
 import { Item } from '../../models/Item';
 
@@ -21,6 +22,7 @@ export class ItemsComponent implements OnInit {
   offers: any[] = [];
   isActive: boolean = false;
   isEdit: boolean = false;
+  user : any = {name : '' , canedit : false}
 
   @ViewChild('itemForm') form: any;
 
@@ -40,7 +42,7 @@ export class ItemsComponent implements OnInit {
     updated_by: null
   };
 
-  constructor(private _inventorydataService: InventorydataService, private _staticdataService: StaticdataholdingService) {}
+  constructor(private _inventorydataService: InventorydataService, private _staticdataService: StaticdataholdingService, private _electronService: ElectronService) {}
 
   ngOnInit() {
     this._inventorydataService.getOffers().subscribe(response => {
@@ -63,7 +65,20 @@ export class ItemsComponent implements OnInit {
         this.currentItem.prodid = 'P' + (itemid.prodid + 1).toString();
       }
     });
-    this.taxes = this._staticdataService.getTaxes()
+    this._inventorydataService.getTaxes().subscribe(taxes => {
+      if(taxes.status == 'success'){
+        this.taxes = taxes.data;
+      }
+    })
+    this._electronService.remote.session.defaultSession.cookies.get({}, (error, cookies) => {
+      cookies.forEach(item => {
+        if(item.name == 'user'){
+          this.user.name = item.value;
+        }else if (item.name == 'canedit' && item.value == 'true'){
+          this.user.canedit = true;
+        }
+      })
+    })
   }
 
 
@@ -111,6 +126,12 @@ export class ItemsComponent implements OnInit {
   }
 
   onEditItem(item: Item) {
+    this.categories.forEach((cur) => {
+      if(cur.id === item.category){
+        item['categoryname'] = cur.name;
+      }
+    })
+
     this._inventorydataService.editItem(item).subscribe(item => {
       this.inventory.forEach((cur, index) => {
         if (item.prodid === cur.prodid) {
@@ -125,6 +146,8 @@ export class ItemsComponent implements OnInit {
 
   onAddItem(item: Item) {
     item.prodid = this.currentItem.prodid;
+    item.updated_by = this.user.name;
+    item.updated_at = new Date();
     this._inventorydataService.savePost(item).subscribe(item => {
       if (item.status === 'ok') {
         this.inventory.unshift(item);
@@ -156,7 +179,7 @@ export class ItemsComponent implements OnInit {
         hasoff: 0,
         offtype: 'percent',
         offvalue: 0,
-        updated_by: null
+        updated_by: this.user.name
       };
     })
 

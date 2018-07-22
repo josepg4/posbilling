@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, session } = require('electron')
 const path = require('path')
 
 let win;
@@ -8,6 +8,7 @@ let login;
 
 let portready = false;
 let initialdataready = false;
+
 
 function createWindow () {
   // Create the browser window.
@@ -57,6 +58,14 @@ function createWindow () {
   //   login = null;
   //   app.quit();
   // })
+  const cookie = {url: 'http://inventoryandbillingapp', name: 'user', value: 'gj'} ;
+  session.defaultSession.cookies.set(cookie, (error) => {
+    if (error) console.error(error)
+  })
+  const cookie1 = {url: 'http://inventoryandbillingapp', name: 'canedit', value: 'true'};
+  session.defaultSession.cookies.set(cookie1, (error) => {
+    if (error) console.error(error)
+  })
 }
 
 // Create window on electron intialization

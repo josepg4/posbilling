@@ -45,8 +45,8 @@
         <div class="card-body p-0 border-top text-secondary font-italic">
             <ul class="list-inline float-left px-2">
                 <li class="list-inline-item py-1 ">Stock : {{item.stock}},</li>
-                <li class="list-inline-item py-1 ">Category : {{item.category | determine:'category'}},</li>
-                <li class="list-inline-item py-1 " >Offer : <span [innerHTML]="item.hasoff | offer:item.offtype:item.offvalue" ></span> </li>
+                <li class="list-inline-item py-1 ">Category : {{item.categoryname}},</li>
+                <li class="list-inline-item py-1 " >Offer : <span [innerHTML]="item.hasoff | offer:item.offtype:item.offvalue:item.offername" ></span> </li>
               </ul>
               <div class="float-right px-2 py-1">
                   {{item.updated_at | date:mediumDate}} by {{item.updated_by}}

@@ -115,7 +115,7 @@ export class CategorysettingsComponent implements OnInit {
     this._electronService.remote.dialog.showMessageBox({message : "Delete Category "+ category.name +"?", title : "Delete Category", buttons : ["Delete", "Cancel"]}, (response) => {
       this._ngZone.run(() => {
         if(response === 0){
-          this._inventorydataService.removeCategory(category.id, 0).subscribe(result => {
+          this._inventorydataService.removeCategory(category.id, 1).subscribe(result => {
             console.log(result);
             if(result.status == 'success'){
               this._inventorydataService.getCategory().subscribe(categories => {

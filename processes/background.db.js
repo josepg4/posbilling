@@ -33,7 +33,6 @@ app.use(function (req, res, next) {
 app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get('/api/inventory', getInventory)
-app.get('/api/inventorynew', getNewInventory)
 app.post('/api/item', addToInventory)
 app.post('/api/itemedit', editInventory)
 app.post('/api/itemremove', removeInventory)
@@ -362,7 +361,7 @@ function getBill(req, res, next){
         })
 }
 
-function getNewInventory(req, res, next) {
+function getInventory(req, res, next) {
     console.log("inside");
     knex.select(
             "i.prodid",
@@ -370,12 +369,15 @@ function getNewInventory(req, res, next) {
             "i.proddisc",
             "i.stock",
             "i.unitprice",
-            "c.name AS category",
+            "i.category",
+            "c.name AS categoryname",
+            "i.tax",
             "t.taxname",
             "t.taxvalue",
             "i.hasoff",
             "i.offtype",
             "i.offvalue",
+            "o.name AS offername",
             "i.updated_by",
             "i.updated_at"
         )
@@ -383,6 +385,7 @@ function getNewInventory(req, res, next) {
         .where('isremoved', false)
         .leftJoin('category AS c', 'i.category', 'c.id')
         .leftJoin('taxes AS t', 'i.tax', 't.taxid')
+        .leftJoin('offers AS o', 'hasoff', 'o.offerid')
         .then(function (response) {
             console.log(response)
             for (let i = 0; i < response.length; i++) {
@@ -393,21 +396,21 @@ function getNewInventory(req, res, next) {
         });
 }
 
-function getInventory(req, res, next){
-    console.log("inside i");
-    knex('inventory')
-        .where('isremoved', false)
-        .select()
-        .then(function (response) {
-            for (let i = 0; i < response.length; i++) {
-                response[i].isremoved = !!+response[i].isremoved;
-                response[i].created_at = response[i].created_at + ' UTC';
-                response[i].updated_at = response[i].updated_at + ' UTC';
-            }
-            res.status(200).json(response);
-            next();
-        });
-}
+// function getInventory(req, res, next){
+//     console.log("inside i");
+//     knex('inventory')
+//         .where('isremoved', false)
+//         .select()
+//         .then(function (response) {
+//             for (let i = 0; i < response.length; i++) {
+//                 response[i].isremoved = !!+response[i].isremoved;
+//                 response[i].created_at = response[i].created_at + ' UTC';
+//                 response[i].updated_at = response[i].updated_at + ' UTC';
+//             }
+//             res.status(200).json(response);
+//             next();
+//         });
+// }
 
 function addToInventory(req, res, next) {
     let data = req.body;
@@ -424,7 +427,7 @@ function addToInventory(req, res, next) {
             "hasoff": data.hasoff,
             "offtype": data.offtype,
             "offvalue": data.offvalue,
-            "updated_by": "gj"
+            "updated_by": data.updated_by
         }).then(function (response) {
             return knex('inventory')
                 .where("prodid", data.prodid)

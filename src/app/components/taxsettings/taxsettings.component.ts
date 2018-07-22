@@ -90,7 +90,7 @@ export class TaxsettingsComponent implements OnInit {
     this._electronService.remote.dialog.showMessageBox({message : "Delete Tax "+ tax.taxname +"?", title : "Delete Tax", buttons : ["Delete", "Cancel"]}, (response) => {
       this._ngZone.run(() => {
         if(response === 0){
-          this._inventorydataService.removeTax(tax.taxid, 0).subscribe(result => {
+          this._inventorydataService.removeTax(tax.taxid, 1).subscribe(result => {
             console.log(result);
             if(result.status == 'success'){
               this._inventorydataService.getTaxes().subscribe(taxes => {
